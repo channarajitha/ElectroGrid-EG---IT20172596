@@ -112,6 +112,40 @@ public class Billing {
 		} 	 
 		return output;  
 	}
+	public String updateBilling(String bID, String bAcc, String bName, String bUsage, String bAmount)  
+	{   
+		String output = "";  
+		try   
+		{    
+			Connection con = connect(); 
+	 
+			if (con == null)    
+			{return "Error while connecting to the database for updating."; } 
+	 
+			// create a prepared statement    
+			String query = "UPDATE billing SET bAcc=?,bName=?,bUsage=?,bAmount=?"  + "WHERE bID=?";  	 
+			PreparedStatement preparedStmt = con.prepareStatement(query); 
+	 
+			// binding values    
+			preparedStmt.setString(1, bAcc);
+			 preparedStmt.setString(2, bName);
+			 preparedStmt.setString(3, bUsage);
+			 preparedStmt.setString(4, bAmount);
+			 preparedStmt.setInt(5, Integer.parseInt(bID)); 
+	 
+			// execute the statement    
+			preparedStmt.execute();    
+			con.close();  
+			String newBilling = readBilling();    
+			output = "{\"status\":\"success\", \"data\": \"" + newBilling + "\"}";    
+		}   
+		catch (Exception e)   
+		{    
+			output =  "{\"status\":\"error\", \"data\": \"Error while updating the billing.\"}";   
+			System.err.println(e.getMessage());   
+		} 	 
+	  return output;  
+	} 
 	
 
 }
