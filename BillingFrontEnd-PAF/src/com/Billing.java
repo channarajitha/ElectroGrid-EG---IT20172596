@@ -59,5 +59,59 @@ public class Billing {
 		} 		
 	  return output;  
 	} 	
+	
+	
+	public String readBilling()  
+	{   
+		String output = ""; 
+		try   
+		{    
+			Connection con = connect(); 
+		
+			if (con == null)    
+			{
+				return "Error while connecting to the database for reading."; 
+			} 
+	 
+			// Prepare the html table to be displayed    
+			output = "<table border=\'1\'><tr><th>Account No</th><th>Customer Name</th><th>Monthly Usage</th><th>Amount</th><th>Update</th><th>Remove</th></tr>";
+	 
+			String query = "select * from billing";    
+			Statement stmt = (Statement) con.createStatement();
+			ResultSet rs = ((java.sql.Statement) stmt).executeQuery(query);
+	 
+			// iterate through the rows in the result set    
+			while (rs.next())    
+			{     
+				 String bID = Integer.toString(rs.getInt("bID"));
+				 String bAcc = rs.getString("bAcc");
+				 String bName = rs.getString("bName");
+				 String bUsage = rs.getString("bUsage");
+				 String bAmount = rs.getString("bAmount");
+				 
+				// Add into the html table 
+				output += "<tr><td><input id=\'hidBillingIDUpdate\' name=\'hidBillingIDUpdate\' type=\'hidden\' value=\'" + bID + "'>" 
+							+ bAcc + "</td>"; 
+				output += "<td>" + bName + "</td>";
+				output += "<td>" + bUsage + "</td>";
+				output += "<td>" + bAmount + "</td>";
+	 
+				// buttons     
+				output +="<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td>"       
+						+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-billid='" + bID + "'>" + "</td></tr>"; 
+			
+			}
+			con.close(); 
+	   
+			output += "</table>";   
+		}   
+		catch (Exception e)   
+		{    
+			output = "Error while reading the billing.";    
+			System.err.println(e.getMessage());   
+		} 	 
+		return output;  
+	}
+	
 
 }
