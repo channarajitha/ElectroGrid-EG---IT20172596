@@ -36,5 +36,26 @@ public class BillingService extends HttpServlet {
 				request.getParameter("bAmount")); 
 				response.getWriter().write(output);
 	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method
+
+		Map paras = getParasMap(request); 
+		 
+		 String output = billingObj.updateBilling(paras.get("hidBillingIDSave").toString(),     
+		    		paras.get("bAcc").toString(),     
+		    		paras.get("bName").toString(),
+		    		paras.get("bUsage").toString(),
+		    		paras.get("bAmount").toString()); 		 
+		 			response.getWriter().write(output);
+	}
+
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		 Map paras = getParasMap(request); 		 
+		 String output = billingObj.deleteBilling(paras.get("bID").toString());  		 
+		 response.getWriter().write(output);
+	}
 
 }
